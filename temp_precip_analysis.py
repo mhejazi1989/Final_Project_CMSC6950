@@ -89,12 +89,23 @@ def plot_temperature_and_precipitation(data, save_path=None):
     # Display correlation in the top-left of the plot
     plt.figtext(0.05, 0.8, f'Temperature-Precipitation Correlation: {temp_precip_correlation:.2f}', fontsize=20, color='black', ha='left')
     
+    # Adding the caption to the figure
+    caption = (
+        "This plot illustrates the trends in minimum, maximum, and average temperatures in Tehran over time. "
+        "Temperature trends are shown in light colors, while precipitation is represented with darker purple bars. "
+        "Extreme values for both temperature and precipitation are highlighted, and the correlation between "
+        "temperature and precipitation is displayed in the top left corner."
+    )
+    plt.figtext(0.5, -0.15, caption, wrap=True, horizontalalignment='center', fontsize=12, color='darkgray')
+    
     # Adjust layout to fit everything properly
     plt.tight_layout()
     
-    # Save the figure as a PDF if save_path is provided
+    # Save the plot as a PDF if a save_path is provided
     if save_path:
-        plt.savefig(save_path, format='pdf')
+        plt.savefig(save_path, format='pdf', bbox_inches='tight')  # Ensure caption is included
+        print(f"Plot saved as {save_path}")
+    
 
     # Show the plot
     plt.show()
