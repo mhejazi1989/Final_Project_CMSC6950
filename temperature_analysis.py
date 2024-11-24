@@ -46,7 +46,7 @@ def plot_temperature_trends(data, max_temp, max_temp_date, min_temp, min_temp_da
         min_temp_date (pd.Timestamp): Date of minimum temperature.
         save_path (str, optional): Path to save the plot as a PDF.
     """
-    plt.figure(figsize=(16, 8))
+    plt.figure(figsize=(16, 10))
     plt.rcParams.update({
         'font.size': 14,
         'axes.titlesize': 20,
@@ -66,27 +66,29 @@ def plot_temperature_trends(data, max_temp, max_temp_date, min_temp, min_temp_da
     plt.scatter(max_temp_date, max_temp, color='red', label=f'Highest Max Temp ({max_temp}°C)', s=100, zorder=5)
     plt.scatter(min_temp_date, min_temp, color='blue', label=f'Lowest Min Temp ({min_temp}°C)', s=100, zorder=5)
 
-    # Annotating extreme values inside the plot with bigger size
+    # Annotating extreme values outside the plot with a box and arrow
     plt.annotate(
-        f'{max_temp}°C', 
+        f'Max Temp: {max_temp}°C', 
         (max_temp_date, max_temp), 
         textcoords="offset points", 
-        xytext=(20, 20), 
+        xytext=(120, 30),  # Position outside the plot
         ha='center', 
         color='red', 
-        fontsize=20,  # Larger font size
+        fontsize=12, 
         fontweight='bold', 
+        bbox=dict(facecolor='white', edgecolor='red', boxstyle='round,pad=1'),
         arrowprops=dict(arrowstyle="->", color='red')
     )
     plt.annotate(
-        f'{min_temp}°C', 
+        f'Min Temp: {min_temp}°C', 
         (min_temp_date, min_temp), 
         textcoords="offset points", 
-        xytext=(-20, -40), 
+        xytext=(-50, -100),  # Position outside the plot
         ha='center', 
         color='blue', 
-        fontsize=20,  # Larger font size
+        fontsize=12, 
         fontweight='bold', 
+        bbox=dict(facecolor='white', edgecolor='blue', boxstyle='round,pad=1'),
         arrowprops=dict(arrowstyle="->", color='blue')
     )
 
@@ -100,29 +102,40 @@ def plot_temperature_trends(data, max_temp, max_temp_date, min_temp, min_temp_da
     # Change x-axis to month names
     plt.xticks(ticks=data.index[::30], labels=data.index.month_name()[::30], rotation=45)
 
-    plt.tight_layout()
-
-    # Extracting and printing the month of the extreme temperatures
-    max_temp_month = max_temp_date.strftime('%B')  # Get full month name for max temperature
-    min_temp_month = min_temp_date.strftime('%B')  # Get full month name for min temperature
-
-    # Printing the extreme temperatures with the corresponding months
-    print(f"Maximum temperature of {max_temp}°C occurred in {max_temp_month} ({max_temp_date.date()})")
-    print(f"Minimum temperature of {min_temp}°C occurred in {min_temp_month} ({min_temp_date.date()})")
-
-    # Save the plot as a PDF if a save_path is provided
-    if save_path:
-        plt.savefig(save_path, format='pdf')
-        print(f"Plot saved as {save_path}")
-    
-    plt.show()
+     # Adding a caption
+    caption = (
+        "This plot illustrates the trends in minimum, maximum, and average temperatures in Tehran over time. "
+        "Highlighted are the extreme temperatures: the highest maximum temperature and the lowest minimum temperature, "
+        "along with their corresponding dates. Shaded areas between the minimum and maximum temperatures "
+        "represent the range of temperature variation on each day."
+    )
+    plt.figtext(
+        0.5, -0.15, caption, 
+        wrap=True, horizontalalignment='center', fontsize=12, color='darkgray'
+    )
 
 # Main script
 file_path = r'E:\CompAppTools\Project\TehranWeather.xlsx'
 data = load_and_prepare_data(file_path)
 max_temp, max_temp_date, min_temp, min_temp_date = find_extreme_values(data)
-save_path = r'E:\CompAppTools\FinalProject-MH\Final_Project_CMSC6950\Temp_extreme.pdf'
+save_path = r'E:\CompAppTools\FinalProject-MH\Final_Project_CMSC6950\Temp_Extreme_Plot.pdf'
 
 # Call the function to plot and save the figure
 plot_temperature_trends(data, max_temp, max_temp_date, min_temp, min_temp_date, save_path)
 
+plt.tight_layout()
+
+ # Save the plot as a PDF if a save_path is provided
+if save_path:
+        plt.savefig(save_path, format='pdf', bbox_inches='tight')  # Ensure caption is included
+        print(f"Plot saved as {save_path}")
+    
+    # Extracting and printing the month of the extreme temperatures
+max_temp_month = max_temp_date.strftime('%B')  # Get full month name for max temperature
+min_temp_month = min_temp_date.strftime('%B')  # Get full month name for min temperature
+
+    # Printing the extreme temperatures with the corresponding months
+print(f"Maximum temperature of {max_temp}°C occurred in {max_temp_month} ({max_temp_date.date()})")
+print(f"Minimum temperature of {min_temp}°C occurred in {min_temp_month} ({min_temp_date.date()})")
+
+plt.show()
