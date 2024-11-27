@@ -34,9 +34,9 @@ def find_extreme_values(data):
     min_temp_date = data['tmin'].idxmin()
     return max_temp, max_temp_date, min_temp, min_temp_date
 
-def plot_temperature_trends(data, max_temp, max_temp_date, min_temp, min_temp_date, save_path=None):
+def plot_temperature_trends(data, max_temp, max_temp_date, min_temp, min_temp_date, mean_temp, save_path=None):
     """
-    Plot temperature trends and highlight extreme values.
+    Plot temperature trends and highlight extreme values along with mean temperature.
     
     Args:
         data (pd.DataFrame): DataFrame with temperature data.
@@ -44,6 +44,7 @@ def plot_temperature_trends(data, max_temp, max_temp_date, min_temp, min_temp_da
         max_temp_date (pd.Timestamp): Date of maximum temperature.
         min_temp (float): Minimum temperature value.
         min_temp_date (pd.Timestamp): Date of minimum temperature.
+        mean_temp (float): Mean temperature value.
         save_path (str, optional): Path to save the plot as a PDF.
     """
     plt.figure(figsize=(16, 10))
@@ -92,50 +93,46 @@ def plot_temperature_trends(data, max_temp, max_temp_date, min_temp, min_temp_da
         arrowprops=dict(arrowstyle="->", color='blue')
     )
 
+    # Adding mean temperature line
+    plt.axhline(y=mean_temp, color='green', linestyle='-', linewidth=2, label=f'Mean Temp ({mean_temp:.2f}°C)')
+
     # Adding labels, title, and legend
     plt.title('Temperature Trends in Tehran Over Time with Extremes Highlighted', fontweight='bold')
     plt.xlabel('Month', fontweight='bold')
     plt.ylabel('Temperature (°C)', fontweight='bold')
     plt.legend(loc='upper left')
     plt.grid()
-    
+
     # Change x-axis to month names
     plt.xticks(ticks=data.index[::30], labels=data.index.month_name()[::30], rotation=45)
 
-     # Adding a caption
+    # Adding a caption
     caption = (
         "This plot illustrates the trends in minimum, maximum, and average temperatures in Tehran over time. "
         "Highlighted are the extreme temperatures: the highest maximum temperature and the lowest minimum temperature, "
         "along with their corresponding dates. Shaded areas between the minimum and maximum temperatures "
-        "represent the range of temperature variation on each day."
+        "represent the range of temperature variation on each day. The green horizontal line represents the mean temperature."
     )
     plt.figtext(
-        0.5, -0.15, caption, 
-        wrap=True, horizontalalignment='center', fontsize=12, color='darkgray'
+        0.5, -0.1, caption, 
+        wrap=True, horizontalalignment='center', fontsize=14, color='black'
     )
+
+    plt.tight_layout()
 
 # Main script
 file_path = r'E:\CompAppTools\Project\TehranWeather.xlsx'
 data = load_and_prepare_data(file_path)
 max_temp, max_temp_date, min_temp, min_temp_date = find_extreme_values(data)
-save_path = r'E:\CompAppTools\FinalProject-MH\Final_Project_CMSC6950\Temp_Extreme_Plot.pdf'
+mean_temp = data['tavg'].mean()  # Calculate the mean temperature
+save_path = r'E:\CompAppTools\FinalProject-MH\Final_Project_CMSC6950\Temp_extreme_Plot.pdf'
 
 # Call the function to plot and save the figure
-plot_temperature_trends(data, max_temp, max_temp_date, min_temp, min_temp_date, save_path)
+plot_temperature_trends(data, max_temp, max_temp_date, min_temp, min_temp_date, mean_temp, save_path)
 
-plt.tight_layout()
-
- # Save the plot as a PDF if a save_path is provided
+# Save the plot as a PDF if a save_path is provided
 if save_path:
         plt.savefig(save_path, format='pdf', bbox_inches='tight')  # Ensure caption is included
         print(f"Plot saved as {save_path}")
     
-    # Extracting and printing the month of the extreme temperatures
-max_temp_month = max_temp_date.strftime('%B')  # Get full month name for max temperature
-min_temp_month = min_temp_date.strftime('%B')  # Get full month name for min temperature
-
-    # Printing the extreme temperatures with the corresponding months
-print(f"Maximum temperature of {max_temp}°C occurred in {max_temp_month} ({max_temp_date.date()})")
-print(f"Minimum temperature of {min_temp}°C occurred in {min_temp_month} ({min_temp_date.date()})")
-
 plt.show()
