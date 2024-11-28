@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 import pandas as pd
-from detect_outliers_4 import detect_outliers  # Import the function to be tested
+from detect_outliers_3 import detect_outliers  # Import the function to be tested
 
 # Sample data for testing
 test_data = {
