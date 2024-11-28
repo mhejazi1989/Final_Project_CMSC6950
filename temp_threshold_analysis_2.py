@@ -137,4 +137,3 @@ data.set_index('date', inplace=True)
 save_path = r'E:\CompAppTools\FinalProject-MH\Final_Project_CMSC6950\Temperature_Above_Below_Mean_Plot_with_1_5Std.pdf'
 result = plot_temperature_and_check_majority(data, temp_column='tavg', save_path=save_path)
 print(result)
-
