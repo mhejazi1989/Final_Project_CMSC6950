@@ -1,3 +1,5 @@
+Here’s the corrected version of the note with improved formatting and consistency:
+________________________________________
 Final Project CMSC6950 - Tehran Weather Analysis
 This repository, hosted at mhejazi1989/Final_Project_CMSC6950, contains the code, scripts, and resources for analyzing Tehran's weather data from October 2023 to September 2024. The project investigates temperature and precipitation trends, extreme weather events, and correlations among key meteorological variables.
 Project Objectives
@@ -64,4 +66,6 @@ Figures
 ________________________________________
 Contributing
 Contributions are welcome! Please fork the repository and create a pull request with detailed information about your changes.
+________________________________________
+This revised version enhances readability and ensures proper Markdown formatting.
 
